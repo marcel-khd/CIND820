@@ -24,7 +24,8 @@ The coding language is Python
 The code was executed in Jupyter Notebooks
 
 ## Contents of the repository
-* Descriptive_Statistics_of_Yelp_Dataset.ipynb contains descriptive analytics of select objects from Yelp dataset
-* Recommender.ipynb contains the code for the actual recommender system
+* Descriptive_Statistics_of_Yelp_Dataset.py contains descriptive analytics of select objects from Yelp dataset
+* Recommender.py contains the code for the actual recommender system
+* Evaluation.py contains the code and results for evaluation metrics of the recommender system
 * yelp_dataset folder contains link to data used in the notebooks. The data is a mixture of original Yelp dataset JSON objects and curated csv files
-* html folder contains html version of executed notebooks
+* html folder contains html version of py notebooks 
