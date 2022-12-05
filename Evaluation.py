@@ -102,7 +102,7 @@ index_list = list(range(0, df_City_Restaurants.shape[0]-1))
 # In[9]:
 
 
-hit_rate_list = []
+precision_list = []
 similarity_list = []
 star_rating_list = []
 review_count_list = []
@@ -137,7 +137,7 @@ for random_seed in index_list:
     #Find all reviews by users who reviewed seed restaurant
     reviews_to_check = reviews_City_Restaurants_reduced[reviews_City_Restaurants_reduced['user_id'].isin(reviewed_seed_restaurant['user_id'])]
 
-    #Calculate hit rate (or recall)
+    #Calculate hits
     #A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant    
     hit_count = 0
     try_count = 0
@@ -145,8 +145,8 @@ for random_seed in index_list:
         if (i in reviews_to_check['business_id'].unique()) == True:
             hit_count = hit_count +1
         try_count = try_count +1
-    hit_rate = hit_count/try_count
-    hit_rate_list.append(hit_rate)
+    precision = hit_count/try_count
+    precision_list.append(precision)
     
     #Calculate similarity (or diversity)
     total_similarity = 0
@@ -167,12 +167,12 @@ for random_seed in index_list:
 # In[10]:
 
 
-average_hit_rate = sum(hit_rate_list) / len(hit_rate_list)
+average_precision = sum(precision_list) / len(precision_list)
 average_similarity = sum(similarity_list) / len(similarity_list)
 average_star_rating = sum(star_rating_list) / len(star_rating_list)
 average_review_count = sum(review_count_list) / len(review_count_list)
 
-print("Average hit rate is: ",str(average_hit_rate))
+print("Average precision is: ",str(average_precision))
 print("Average diversity is: ",str(1-average_similarity))
 print("Average star rating is: ",str(average_star_rating))
 print("Average review count is: ",str(average_review_count))
@@ -183,7 +183,7 @@ print("Average review count is: ",str(average_review_count))
 # In[11]:
 
 
-hit_rate_list_cat = []
+precision_list_cat = []
 similarity_list_cat = []
 star_rating_list_cat = []
 review_count_list_cat = []
@@ -205,7 +205,7 @@ for random_seed in index_list:
     #Find all reviews by users who reviewed seed restaurant
     reviews_to_check = reviews_City_Restaurants_reduced[reviews_City_Restaurants_reduced['user_id'].isin(reviewed_seed_restaurant['user_id'])]
 
-    #Calculate hit rate (or recall)
+    #Calculate hits
     #A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant
     hit_count = 0
     try_count = 0
@@ -213,8 +213,8 @@ for random_seed in index_list:
         if (i in reviews_to_check['business_id'].unique()) == True:
             hit_count = hit_count +1
         try_count = try_count +1
-    hit_rate = hit_count/try_count
-    hit_rate_list_cat.append(hit_rate)
+    precision = hit_count/try_count
+    precision_list_cat.append(precision)
        
     #Calculate similarity (or Diversity)
     total_similarity = 0
@@ -235,12 +235,12 @@ for random_seed in index_list:
 # In[12]:
 
 
-average_hit_rate_cat = sum(hit_rate_list_cat) / len(hit_rate_list_cat)
+average_precision_cat = sum(precision_list_cat) / len(precision_list_cat)
 average_similarity_cat = sum(similarity_list_cat) / len(similarity_list_cat)
 average_star_rating_cat = sum(star_rating_list_cat) / len(star_rating_list_cat)
 average_review_count_cat = sum(review_count_list_cat) / len(review_count_list_cat)
 
-print("Average hit rate using categories is: ",str(average_hit_rate_cat))
+print("Average precision using categories is: ",str(average_precision_cat))
 print("Average diversity using categories is: ",str(1-average_similarity_cat))
 print("Average star rating using categories is: ",str(average_star_rating_cat))
 print("Average review count using categories is: ",str(average_review_count_cat))
@@ -251,7 +251,7 @@ print("Average review count using categories is: ",str(average_review_count_cat)
 # In[13]:
 
 
-hit_rate_list_random = []
+precision_list_random = []
 similarity_list_random = []
 star_rating_list_random = []
 review_count_list_random = []
@@ -266,7 +266,7 @@ for random_seed in index_list:
     reviews_to_check = reviews_City_Restaurants_reduced[reviews_City_Restaurants_reduced['user_id'].isin(reviewed_seed_restaurant['user_id'])]
 
    
-    #Calculate hit rate (or recall)
+    #Calculate hits
     #A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant    
     hit_count = 0
     try_count = 0
@@ -274,8 +274,8 @@ for random_seed in index_list:
         if (i in reviews_to_check['business_id'].unique()) == True:
             hit_count = hit_count +1
         try_count = try_count +1
-    hit_rate = hit_count/try_count
-    hit_rate_list_random.append(hit_rate)
+    precision = hit_count/try_count
+    precision_list_random.append(precision)
     
     #Calculate similarity (or Diversity)
     total_similarity = 0
@@ -296,12 +296,12 @@ for random_seed in index_list:
 # In[14]:
 
 
-average_hit_rate_random = sum(hit_rate_list_random) / len(hit_rate_list_random)
+average_precision_random = sum(precision_list_random) / len(precision_list_random)
 average_similarity_random = sum(similarity_list_random) / len(similarity_list_random)
 average_star_rating_random = sum(star_rating_list_random) / len(star_rating_list_random)
 average_review_count_random = sum(review_count_list_random) / len(review_count_list_random)
 
-print("Average hit rate using random recommendations is: ",str(average_hit_rate_random))
+print("Average precision using random recommendations is: ",str(average_precision_random))
 print("Average diversity using random recommendations is: ",str(1-average_similarity_random))
 print("Average star rating using random recommendations is: ",str(average_star_rating_random))
 print("Average review count using random recommendations is: ",str(average_review_count_random))
@@ -329,7 +329,7 @@ total_average_review_count
 
 
 metrics_data = {'Model Name':['Recommender','Baseline_1 Categories','Baseline_2 Random'],
-                'Hit Rate':[average_hit_rate, average_hit_rate_cat, average_hit_rate_random],
+                'Precision':[average_precision, average_precision_cat, average_precision_random],
                 'Diversity':[1-average_similarity, 1-average_similarity_cat, 1-average_similarity_random],
                 'Avg Star Rating':[average_star_rating, average_star_rating_cat, average_star_rating_random],
                 'Avg Review Count':[average_review_count, average_review_count_cat, average_review_count_random]}
@@ -341,12 +341,12 @@ df_metrics
 # In[34]:
 
 
-#Plot Hit Rate
+#Plot Precision
 import matplotlib.pyplot as plt
 import seaborn as sns
 get_ipython().run_line_magic('matplotlib', 'inline')
 
-ax = sns.barplot(data=df_metrics, x = 'Model Name', y='Hit Rate')
+ax = sns.barplot(data=df_metrics, x = 'Model Name', y='Precision')
 ax.bar_label(ax.containers[0])
 
 
@@ -384,4 +384,3 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 
 ax = sns.barplot(data=df_metrics, x = 'Model Name', y='Avg Review Count')
 ax.bar_label(ax.containers[0])
-
