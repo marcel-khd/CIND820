@@ -3,14 +3,14 @@
 
 # # 1. Load Data
 
-# In[1]:
+# In[3]:
 
 
 import numpy as np
 import pandas as pd
 
 
-# In[3]:
+# In[4]:
 
 
 #Read business object
@@ -20,14 +20,14 @@ columns = business_df.head()
 columns 
 
 
-# In[4]:
+# In[5]:
 
 
 #Replace null values in business df
 business_df.fillna('NA', inplace=True)
 
 
-# In[5]:
+# In[6]:
 
 
 #Select businesses in Nashville only
@@ -36,7 +36,7 @@ df_City = business_df[business_df['city']=='Nashville']
 df_City[['is_open','business_id']].groupby(['is_open']).count()
 
 
-# In[6]:
+# In[7]:
 
 
 #Select open businesses only
@@ -45,7 +45,7 @@ count_row = df_City.shape[0]
 print(str(count_row))
 
 
-# In[7]:
+# In[8]:
 
 
 #Find categories that contain the keyword 'Restaurants'
@@ -54,13 +54,20 @@ count_row = df_City_Restaurants.shape[0]
 print(str(count_row))
 
 
-# In[8]:
+# In[9]:
 
 
 #Show number restaurants by category in the selected city
 df_categories = df_City_Restaurants[['categories','business_id']].groupby(['categories']).count()
 #df_categories.sort_values(by=['business_id'],ascending=False, inplace=True)
 #df_categories[df_categories['business_id']>10]
+
+
+# In[25]:
+
+
+#Save selected city restaurants to csv file
+df_City_Restaurants.to_csv('selected_city_restaurants.csv', sep=',')
 
 
 # In[9]:
@@ -101,7 +108,7 @@ print('There are  ' + str(count_row) + ' reviews for restaurants in selected cit
 
 # # 2. Text Pre-Processing
 
-# In[78]:
+# In[16]:
 
 
 import string
@@ -169,18 +176,18 @@ reviews_City_Restaurants['text'] = reviews_City_Restaurants['text'].apply(clean_
 # In[13]:
 
 
-#Save Phiiladelphia restaurants reviews to csv file
+#Save Selected restaurants reviews to csv file
 reviews_City_Restaurants.to_csv('reviews_selected_city_restaurants_Clean.csv', sep=',')
 
 
-# In[37]:
+# In[26]:
 
 
-#Read Phiiladelphia restaurants reviews from csv file
+#Read Selected restaurants reviews from csv file
 reviews_City_Restaurants = pd.read_csv('reviews_selected_city_restaurants_Clean.csv')
 
 
-# In[38]:
+# In[27]:
 
 
 #Find number of characters in a review
@@ -193,7 +200,7 @@ def count_text(string_input):
 reviews_City_Restaurants['nbr_characters'] = reviews_City_Restaurants['text'].apply(count_text)
 
 
-# In[52]:
+# In[28]:
 
 
 #Select a subset of reviews for better quality
@@ -205,18 +212,26 @@ reviews_City_Restaurants_reduced = reviews_City_Restaurants[reviews_City_Restaur
 reviews_City_Restaurants_reduced = reviews_City_Restaurants_reduced[reviews_City_Restaurants['nbr_characters']>49]
 
 
-# In[53]:
+# In[29]:
 
 
 reviews_City_Restaurants_reduced.shape
 
 
-# In[74]:
+# In[30]:
+
+
+#Save Reduced Selected restaurants reviews to csv file
+reviews_City_Restaurants_reduced.to_csv('reviews_selected_city_restaurants_Clean_Reduced.csv', sep=',')
+
+
+# In[14]:
 
 
 #Group the reviews by business
-reviews_grouped_by_business = reviews_City_Restaurants_reduced.drop(['row_nbr','review_id','user_id','stars','useful','funny','cool','date','year','nbr_characters'], axis=1)
-reviews_grouped_by_business.reset_index()
+reviews_grouped_by_business = reviews_City_Restaurants_reduced.loc[:,['business_id','text']]
+#reviews_grouped_by_business = reviews_City_Restaurants_reduced.drop(['row_nbr','review_id','user_id','stars','useful','funny','cool','date','year','nbr_characters'], axis=1)
+#reviews_grouped_by_business.reset_index()
 
 reviews_grouped_by_business['reviews'] = reviews_grouped_by_business.groupby(['business_id'])['text'].transform(lambda x : ' | '.join(x))
 
@@ -233,7 +248,7 @@ reviews_grouped_by_business.shape
 reviews_grouped_by_business.head()
 
 
-# In[79]:
+# In[17]:
 
 
 #Vectorize reviews
@@ -242,7 +257,7 @@ reviews_grouped_by_business = reviews_grouped_by_business.fillna('')
 vectorized_reviews = count_vectorizer.fit_transform(reviews_grouped_by_business['reviews'])
 
 
-# In[80]:
+# In[18]:
 
 
 vectorized_reviews.shape
@@ -250,24 +265,28 @@ vectorized_reviews.shape
 
 # # 3. Randomly select "seed" restaurant
 
-# In[81]:
+# In[19]:
 
 
 #Randomly select a restaurant
-print(df_City_Restaurants.iloc[200,:])
-print(df_City_Restaurants.iloc[200,12])
+import random
+random_seed = random.randint(0,df_City_Restaurants.shape[0]-1)
+
+print(df_City_Restaurants.iloc[random_seed,:])
+print(df_City_Restaurants.iloc[random_seed,12])
 
 
-# In[82]:
+# In[20]:
 
 
 #Find all the seed restaurant's reviews by copy/paste business ID to this command
-selected_reviews = reviews_City_Restaurants_reduced[reviews_City_Restaurants_reduced['business_id']=='HCHHrf21UAgbxAi8T4Q4Iw']
+seed_restaurant_id = df_City_Restaurants.iloc[random_seed,0]
+selected_reviews = reviews_City_Restaurants_reduced[reviews_City_Restaurants_reduced['business_id']==seed_restaurant_id]
 selected_reviews = selected_reviews['text']
 selected_reviews.head()
 
 
-# In[83]:
+# In[21]:
 
 
 #Find how many reviews the seed restaurant has
@@ -276,7 +295,7 @@ print('There are  ' + str(selected_reviews.shape[0]) + ' reviews for the selecte
 
 # # 4. Calculate recommendations
 
-# In[84]:
+# In[22]:
 
 
 from scipy.spatial.distance import cdist
@@ -287,22 +306,27 @@ distance = cdist(count_vectorizer.transform(selected_reviews).todense().mean(axi
 distance
 
 
-# In[89]:
+# In[23]:
 
 
-distance.size
+#First reset index to make sure we are getting the correct row number for the seed restaurant
+df_City_Restaurants = df_City_Restaurants.loc[:,['business_id', 'categories', 'name', 'stars','review_count']]
+df_City_Restaurants.reset_index()
 
+#Remove the seed restaurant from the list of recommendations
+to_remove = reviews_grouped_by_business[reviews_grouped_by_business['business_id']==df_City_Restaurants.iloc[random_seed,0]].index[0]
 
-# In[85]:
-
-
-most_similar = distance.argsort().ravel()[:10]
+#Find the 10 most similar restaurants based on recommendations
+most_similar = distance.argsort().ravel()[:11]
+most_similar = most_similar[most_similar != to_remove]
+most_similar = most_similar[:10]
 most_similar
 
 
-# In[95]:
+# In[24]:
 
 
+#Display the 10 most similar restaurants based on recommendations
 df_most_similar = df_City_Restaurants.loc[df_City_Restaurants['business_id'].isin(reviews_grouped_by_business['business_id'].iloc[most_similar]), ['business_id', 'categories', 'name', 'stars','review_count']]
 df_most_similar
 
