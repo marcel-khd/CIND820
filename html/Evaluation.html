@@ -13571,7 +13571,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hit_rate_list</span> <span class="o">=</span> <span class="p">[]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">precision_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">similarity_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">star_rating_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">review_count_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -13606,7 +13606,7 @@ div#notebook {
     <span class="c1">#Find all reviews by users who reviewed seed restaurant</span>
     <span class="n">reviews_to_check</span> <span class="o">=</span> <span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">reviewed_seed_restaurant</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">])]</span>
 
-    <span class="c1">#Calculate hit rate (or recall)</span>
+    <span class="c1">#Calculate hits</span>
     <span class="c1">#A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant    </span>
     <span class="n">hit_count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">try_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13614,8 +13614,8 @@ div#notebook {
         <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">reviews_to_check</span><span class="p">[</span><span class="s1">&#39;business_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">hit_count</span> <span class="o">=</span> <span class="n">hit_count</span> <span class="o">+</span><span class="mi">1</span>
         <span class="n">try_count</span> <span class="o">=</span> <span class="n">try_count</span> <span class="o">+</span><span class="mi">1</span>
-    <span class="n">hit_rate</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
-    <span class="n">hit_rate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_rate</span><span class="p">)</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
+    <span class="n">precision_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span>
     
     <span class="c1">#Calculate similarity (or diversity)</span>
     <span class="n">total_similarity</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13643,12 +13643,12 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_hit_rate</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hit_rate_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit_rate_list</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_precision</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">precision_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">precision_list</span><span class="p">)</span>
 <span class="n">average_similarity</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">similarity_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity_list</span><span class="p">)</span>
 <span class="n">average_star_rating</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">star_rating_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_rating_list</span><span class="p">)</span>
 <span class="n">average_review_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">review_count_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">review_count_list</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average hit rate is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_hit_rate</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average precision is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_precision</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average diversity is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">average_similarity</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average star rating is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_star_rating</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average review count is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_review_count</span><span class="p">))</span>
@@ -13692,7 +13692,7 @@ Average review count is:  357.55315476190447
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hit_rate_list_cat</span> <span class="o">=</span> <span class="p">[]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">precision_list_cat</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">similarity_list_cat</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">star_rating_list_cat</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">review_count_list_cat</span> <span class="o">=</span> <span class="p">[]</span>
@@ -13714,7 +13714,7 @@ Average review count is:  357.55315476190447
     <span class="c1">#Find all reviews by users who reviewed seed restaurant</span>
     <span class="n">reviews_to_check</span> <span class="o">=</span> <span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">reviewed_seed_restaurant</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">])]</span>
 
-    <span class="c1">#Calculate hit rate (or recall)</span>
+    <span class="c1">#Calculate hits</span>
     <span class="c1">#A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant</span>
     <span class="n">hit_count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">try_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13722,8 +13722,8 @@ Average review count is:  357.55315476190447
         <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">reviews_to_check</span><span class="p">[</span><span class="s1">&#39;business_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">hit_count</span> <span class="o">=</span> <span class="n">hit_count</span> <span class="o">+</span><span class="mi">1</span>
         <span class="n">try_count</span> <span class="o">=</span> <span class="n">try_count</span> <span class="o">+</span><span class="mi">1</span>
-    <span class="n">hit_rate</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
-    <span class="n">hit_rate_list_cat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_rate</span><span class="p">)</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
+    <span class="n">precision_list_cat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span>
        
     <span class="c1">#Calculate similarity (or Diversity)</span>
     <span class="n">total_similarity</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13751,12 +13751,12 @@ Average review count is:  357.55315476190447
 <div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_hit_rate_cat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hit_rate_list_cat</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit_rate_list_cat</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_precision_cat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">precision_list_cat</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">precision_list_cat</span><span class="p">)</span>
 <span class="n">average_similarity_cat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">similarity_list_cat</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity_list_cat</span><span class="p">)</span>
 <span class="n">average_star_rating_cat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">star_rating_list_cat</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_rating_list_cat</span><span class="p">)</span>
 <span class="n">average_review_count_cat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">review_count_list_cat</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">review_count_list_cat</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average hit rate using categories is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_hit_rate_cat</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average precision using categories is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_precision_cat</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average diversity using categories is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">average_similarity_cat</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average star rating using categories is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_star_rating_cat</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average review count using categories is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_review_count_cat</span><span class="p">))</span>
@@ -13800,7 +13800,7 @@ Average review count using categories is:  147.47827380952347
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hit_rate_list_random</span> <span class="o">=</span> <span class="p">[]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">precision_list_random</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">similarity_list_random</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">star_rating_list_random</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">review_count_list_random</span> <span class="o">=</span> <span class="p">[]</span>
@@ -13815,7 +13815,7 @@ Average review count using categories is:  147.47827380952347
     <span class="n">reviews_to_check</span> <span class="o">=</span> <span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="n">reviews_City_Restaurants_reduced</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">reviewed_seed_restaurant</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">])]</span>
 
    
-    <span class="c1">#Calculate hit rate (or recall)</span>
+    <span class="c1">#Calculate hits</span>
     <span class="c1">#A hit is achieved if recommended restaurant was reviewed by at least one user who also reviewed seed restaurant    </span>
     <span class="n">hit_count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">try_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13823,8 +13823,8 @@ Average review count using categories is:  147.47827380952347
         <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">reviews_to_check</span><span class="p">[</span><span class="s1">&#39;business_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">hit_count</span> <span class="o">=</span> <span class="n">hit_count</span> <span class="o">+</span><span class="mi">1</span>
         <span class="n">try_count</span> <span class="o">=</span> <span class="n">try_count</span> <span class="o">+</span><span class="mi">1</span>
-    <span class="n">hit_rate</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
-    <span class="n">hit_rate_list_random</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_rate</span><span class="p">)</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">hit_count</span><span class="o">/</span><span class="n">try_count</span>
+    <span class="n">precision_list_random</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span>
     
     <span class="c1">#Calculate similarity (or Diversity)</span>
     <span class="n">total_similarity</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13852,12 +13852,12 @@ Average review count using categories is:  147.47827380952347
 <div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_hit_rate_random</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hit_rate_list_random</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit_rate_list_random</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">average_precision_random</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">precision_list_random</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">precision_list_random</span><span class="p">)</span>
 <span class="n">average_similarity_random</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">similarity_list_random</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity_list_random</span><span class="p">)</span>
 <span class="n">average_star_rating_random</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">star_rating_list_random</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_rating_list_random</span><span class="p">)</span>
 <span class="n">average_review_count_random</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">review_count_list_random</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">review_count_list_random</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average hit rate using random recommendations is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_hit_rate_random</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average precision using random recommendations is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_precision_random</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average diversity using random recommendations is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">average_similarity_random</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average star rating using random recommendations is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_star_rating_random</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average review count using random recommendations is: &quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">average_review_count_random</span><span class="p">))</span>
@@ -13972,7 +13972,7 @@ Average review count using random recommendations is:  157.95124999999993
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">metrics_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Model Name&#39;</span><span class="p">:[</span><span class="s1">&#39;Recommender&#39;</span><span class="p">,</span><span class="s1">&#39;Baseline_1 Categories&#39;</span><span class="p">,</span><span class="s1">&#39;Baseline_2 Random&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;Hit Rate&#39;</span><span class="p">:[</span><span class="n">average_hit_rate</span><span class="p">,</span> <span class="n">average_hit_rate_cat</span><span class="p">,</span> <span class="n">average_hit_rate_random</span><span class="p">],</span>
+                <span class="s1">&#39;Precision&#39;</span><span class="p">:[</span><span class="n">average_precision</span><span class="p">,</span> <span class="n">average_precision_cat</span><span class="p">,</span> <span class="n">average_precision_random</span><span class="p">],</span>
                 <span class="s1">&#39;Diversity&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="o">-</span><span class="n">average_similarity</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">average_similarity_cat</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">average_similarity_random</span><span class="p">],</span>
                 <span class="s1">&#39;Avg Star Rating&#39;</span><span class="p">:[</span><span class="n">average_star_rating</span><span class="p">,</span> <span class="n">average_star_rating_cat</span><span class="p">,</span> <span class="n">average_star_rating_random</span><span class="p">],</span>
                 <span class="s1">&#39;Avg Review Count&#39;</span><span class="p">:[</span><span class="n">average_review_count</span><span class="p">,</span> <span class="n">average_review_count_cat</span><span class="p">,</span> <span class="n">average_review_count_random</span><span class="p">]}</span>
@@ -14062,12 +14062,12 @@ Average review count using random recommendations is:  157.95124999999993
 <div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Plot Hit Rate</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Plot Precision</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_metrics</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;Model Name&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Hit Rate&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_metrics</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;Model Name&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 
